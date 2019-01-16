@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> _handleGoogleSignIn() async {
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      print('add git');
     } catch (error) {
       print(error);
     }
