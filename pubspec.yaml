@@ -23,7 +23,9 @@ dependencies:
   percent_indicator: ^1.0.10
   shared_preferences: ^0.4.3
   google_sign_in: ^3.2.4
-  firebase_auth: ^0.6.6
+
+
+
   flutter_localizations:
       sdk: flutter
 dev_dependencies:

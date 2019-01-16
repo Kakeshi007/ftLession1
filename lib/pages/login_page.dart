@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'helper.dart';
 import 'package:flutter_app/api_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home_page.dart';
 
@@ -22,18 +21,19 @@ class _LoginPageState extends State<LoginPage> {
   Helper helper = new Helper();
   ApiProvider apiProvider = new ApiProvider();
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
 
-  Future<FirebaseUser> _handleGoogleSignIn() async {
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    FirebaseUser user = await _auth.signInWithGoogle(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    print("signed in " + user.displayName);
-    return user;
+  Future<Null> _handleGoogleSignIn() async {
+    try {
+      GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      print("display name=" + googleSignInAccount.email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('google', googleSignInAccount.displayName);
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
