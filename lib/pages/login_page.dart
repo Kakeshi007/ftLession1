@@ -28,9 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> _handleGoogleSignIn() async {
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-      print("display name=" + googleSignInAccount.email);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('google', googleSignInAccount.displayName);
     } catch (error) {
       print(error);
     }
