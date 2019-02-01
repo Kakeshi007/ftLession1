@@ -28,6 +28,14 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> _handleGoogleSignIn() async {
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString("email", googleSignInAccount.email);
+      await preferences.setString(
+          "displayName", googleSignInAccount.displayName);
+      await preferences.setString("photoURL", googleSignInAccount.photoUrl);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+      //print(googleSignInAccount);
     } catch (error) {
       print(error);
     }
@@ -102,6 +110,12 @@ class _LoginPageState extends State<LoginPage> {
                               //prefixIcon: Icon(Icons.settings_ethernet),
                               labelText: 'รหัสผ่าน'),
                         ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            labelText: 'Test',
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -128,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                     IconData(0xea8d, fontFamily: 'iconmoon')),
                                 label: Text('google')),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ))

@@ -22,18 +22,31 @@ class _HomePageState extends State<HomePage> {
   int age = 0;
   double height = 185.0;
   bool isSuccess = true;
-  List fruits = ['apple', 'mango', 'papaya']; //array
-  Map fruit = {'apple': 'red', 'mango': 'yellow', 'papaya': 'green'};
+
+  String token = "";
+  String email = "";
+  String displayName = "";
+  String photoUrl = "";
 
   List items = [];
   bool isLoding = true;
 
   ApiProvider apiProvider = ApiProvider();
 
+  Future getInfo() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      this.email = preferences.getString('email');
+      this.displayName = preferences.getString('displayName');
+      this.photoUrl = preferences.getString('photoURL');
+    });
+  }
+
   Future fetchUsers() async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String token = preferences.getString('token');
+
       var response = await apiProvider.getApiUsers(token);
 
       if (response.statusCode == 200) {
@@ -55,6 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getInfo();
     fetchUsers();
   }
 
@@ -132,13 +146,12 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                'Wiriya',
+                this.displayName,
                 style: TextStyle(fontSize: 20.0),
               ),
-              accountEmail: Text('wiriya.khetwit@gmail.com'),
+              accountEmail: Text(this.email),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://scontent.fbkk12-1.fna.fbcdn.net/v/t1.0-1/c0.0.100.100/p100x100/29809_553005098059869_537060144_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk12-1.fna&oh=4fbbe2734f8f3374a1eb8e8e95c67e0d&oe=5C45A7AE"),
+                backgroundImage: NetworkImage(this.photoUrl),
               ),
             ),
             ListTile(
