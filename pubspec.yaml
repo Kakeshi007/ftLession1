@@ -23,8 +23,9 @@ dependencies:
   percent_indicator: ^1.0.10
   shared_preferences: ^0.4.3
   google_sign_in: ^3.2.4
-
-
+  sqflite: any
+  path_provider: any
+  fluttertoast: ^3.0.0
 
   flutter_localizations:
       sdk: flutter

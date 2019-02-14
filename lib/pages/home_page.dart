@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/api_provider.dart';
+import 'package:flutter_app/pages/login_page.dart';
 import 'package:flutter_app/pages/qof/qof_all_page.dart';
+import 'package:flutter_app/pages/user_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'setting_page.dart';
 import 'info_page.dart';
 //import 'trends_page.dart';
 import 'award_page.dart';
 import 'chckLotto_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,6 +34,12 @@ class _HomePageState extends State<HomePage> {
   bool isLoding = true;
 
   ApiProvider apiProvider = ApiProvider();
+
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+  );
 
   Future getInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -74,7 +82,7 @@ class _HomePageState extends State<HomePage> {
 
   void showMessage() {
     Person person = new Person("person class");
-    person.ShowName();
+    person.showName();
   }
 
   @override
@@ -105,8 +113,15 @@ class _HomePageState extends State<HomePage> {
               ),
               FlatButton(
                 child: Text('ใช่'),
-                onPressed: () {
-                  exit(0);
+                onPressed: () async {
+                  try {
+                    await _googleSignIn.disconnect();
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  } catch (error) {
+                    print(error);
+                  }
+                  // exit(0);
                 },
               ),
             ],
@@ -133,6 +148,14 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                         builder: (context) => InfoPage(),
                         fullscreenDialog: true));
+              }),
+          IconButton(
+              icon: Icon(Icons.accessibility),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserPage(), maintainState: true));
               })
         ],
       ),
@@ -288,7 +311,7 @@ class _HomePageState extends State<HomePage> {
 class Person {
   String name;
   Person(this.name); //constructor
-  ShowName() {
+  showName() {
     print('Hi $name');
     print('sum = ${2 + 6}');
   }

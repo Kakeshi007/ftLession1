@@ -29,10 +29,12 @@ class _LoginPageState extends State<LoginPage> {
     try {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
       SharedPreferences preferences = await SharedPreferences.getInstance();
+
       await preferences.setString("email", googleSignInAccount.email);
       await preferences.setString(
           "displayName", googleSignInAccount.displayName);
       await preferences.setString("photoURL", googleSignInAccount.photoUrl);
+
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
       //print(googleSignInAccount);
@@ -109,12 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                               fillColor: Colors.white,
                               //prefixIcon: Icon(Icons.settings_ethernet),
                               labelText: 'รหัสผ่าน'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'Test',
-                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

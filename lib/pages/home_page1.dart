@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
 
   void showMessage() {
     Person person = new Person("person class");
-    person.ShowName();
+    person.showName();
   }
 
   @override
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
 class Person {
   String name;
   Person(this.name); //constructor
-  ShowName() {
+  showName() {
     print('Hi $name');
     print('sum = ${2 + 6}');
   }

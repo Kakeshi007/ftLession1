@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/login_page.dart';
+import 'package:flutter_app/database_helper.dart';
 
-void main() {
+void main() async {
+  DatabaseHelper databaseHelper = new DatabaseHelper.internal();
+  await databaseHelper.initialDatabase();
   runApp(Main());
 }
 
