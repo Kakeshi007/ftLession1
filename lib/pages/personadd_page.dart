@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_app/users.dart';
 
 class PersonAddPage extends StatefulWidget {
   @override
@@ -11,18 +12,41 @@ class _PersonAddPageState extends State<PersonAddPage> {
   @override
   final _formkey = GlobalKey<FormState>();
   Helper helper = new Helper();
+  Users users = new Users();
+  String sex = "F";
+
+  TextEditingController firstNameController = new TextEditingController();
+  TextEditingController lastNameController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
 
   Future _saveData() async {
     if (_formkey.currentState.validate()) {
+      users.first_name = firstNameController.text;
+      users.last_name = lastNameController.text;
+      users.email = emailController.text;
+
+      try {
+        await users.save(users);
+        Fluttertoast.showToast(
+          textColor: Colors.green,
+          msg: "บันทึกข้อมูลสำเร็จ",
+          toastLength: Toast.LENGTH_SHORT,
+        );
+        Navigator.of(context).pop();
+      } catch (error) {
+        print(error);
+        Fluttertoast.showToast(
+          textColor: Colors.red,
+          msg: "ไม่สามารถบันทึกข้อมูลได้",
+          toastLength: Toast.LENGTH_SHORT,
+        );
+      }
     } else {
       Fluttertoast.showToast(
-          msg: "ข้อมูลไม่ครบ",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: "ข้อมูลไม่ครบ",
+        textColor: Colors.amberAccent[600],
+        toastLength: Toast.LENGTH_SHORT,
+      );
     }
   }
 
@@ -56,6 +80,7 @@ class _PersonAddPageState extends State<PersonAddPage> {
                       child: Column(
                         children: <Widget>[
                           TextFormField(
+                            controller: firstNameController,
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'กรุณาระบุชื่อ';
@@ -69,6 +94,7 @@ class _PersonAddPageState extends State<PersonAddPage> {
                           ),
                           Divider(),
                           TextFormField(
+                            controller: lastNameController,
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'กรุณาระบุนามสกุล';
@@ -82,6 +108,7 @@ class _PersonAddPageState extends State<PersonAddPage> {
                           ),
                           Divider(),
                           TextFormField(
+                            controller: emailController,
                             validator: (value) {
                               if (!helper.isEmail(value)) {
                                 return 'กรุณาระบุอีเมลล์';
@@ -93,6 +120,36 @@ class _PersonAddPageState extends State<PersonAddPage> {
                                 border: InputBorder.none,
                                 labelText: 'อีเมลล์',
                                 fillColor: Colors.grey[10]),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                  icon: Icon(IconData(
+                                    0xe9dc,
+                                    fontFamily: 'iconmoon',
+                                  )),
+                                  color: sex == "M" ? Colors.pink : Colors.grey,
+                                  iconSize: 40.0,
+                                  onPressed: () {
+                                    setState(() {
+                                      sex = "M";
+                                    });
+                                  }),
+                              IconButton(
+                                  icon: Icon(
+                                      IconData(0xe9dd, fontFamily: 'iconmoon')),
+                                  color: sex == "F" ? Colors.pink : Colors.grey,
+                                  iconSize: 40.0,
+                                  onPressed: () {
+                                    setState(() {
+                                      sex = "F";
+                                    });
+                                  }),
+                            ],
                           ),
                           SizedBox(
                             height: 20.0,
